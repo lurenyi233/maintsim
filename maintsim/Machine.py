@@ -374,20 +374,6 @@ class Machine:
             except simpy.Interrupt:
                 while self.under_repair:
                     yield self.env.timeout(1)
-
-    def get_priority(self):
-        return self.i
-
-    def update_priority(self):
-        '''
-        Update the maintenance priority for this machine.
-        '''
-        if (self.maintenance_request) and (not self.under_repair):
-            # delete request, update priority 
-            self.maintenance_request.cancel()
-            priority = self.get_priority()
-            self.maintenance_request = self.system.repairman.request(priority=priority)
-            yield self.maintenance_request
     
     def write_failure(self):
         '''
